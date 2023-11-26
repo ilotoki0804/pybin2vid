@@ -1,10 +1,10 @@
 # pybin2vid
 
-![[CI](https://github.com/ilotoki0804/pybin2vid/workflows/ci/badge.svg?branch=main)](https://github.com/ilotoki0804/pybin2vid/actions?workflow=ci)
+<!-- ![[CI](https://github.com/ilotoki0804/pybin2vid/workflows/ci/badge.svg?branch=main)](https://github.com/ilotoki0804/pybin2vid/actions?workflow=ci)
 [![Codecov](https://codecov.io/gh/ilotoki0804/pybin2vid/branch/main/graph/badge.svg)](https://codecov.io/gh/ilotoki0804/pybin2vid)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d96cc9a1841a819cd4f5/maintainability)](https://codeclimate.com/github/ilotoki0804/pybin2vid/maintainability)
 [![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/ilotoki0804/pybin2vid)](https://codeclimate.com/github/ilotoki0804/pybin2vid)
-[![Read the Docs](https://img.shields.io/readthedocs/pybin2vid/latest?label=Read%20the%20Docs)](https://pybin2vid.readthedocs.io/en/latest/index.html)
+[![Read the Docs](https://img.shields.io/readthedocs/pybin2vid/latest?label=Read%20the%20Docs)](https://pybin2vid.readthedocs.io/en/latest/index.html) -->
 
 Convert Arbitrary Bineries to Video.
 
@@ -23,11 +23,13 @@ Convert Arbitrary Bineries to Video.
 
 이 프로젝트를 사용하려면 다음과 같은 pypi 패키지 의존성이 필요합니다.
 
+```
 pylibdmtx
 numpy
 pillow
 opencv-python
 matplotlib
+```
 
 다운로드 받으려면 `requirements.txt`를 이용할 수 있습니다.
 
