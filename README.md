@@ -6,7 +6,7 @@
 [![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/ilotoki0804/pybin2vid)](https://codeclimate.com/github/ilotoki0804/pybin2vid)
 [![Read the Docs](https://img.shields.io/readthedocs/pybin2vid/latest?label=Read%20the%20Docs)](https://pybin2vid.readthedocs.io/en/latest/index.html) -->
 
-Convert Arbitrary Bineries to Video.
+Convert Arbitrary Binaries to Video.
 
 이 프로젝트는 임의의 바이너리 데이터를 영상으로 변환할 수 있도록 합니다.
 
