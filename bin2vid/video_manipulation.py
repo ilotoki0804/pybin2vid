@@ -8,17 +8,22 @@ import os
 from .decode import (
     read_frame,
 )
+from .miscs import check_file_or_folder_existance
 
 
-def make_video(filename_include_extension: str, path_to_images: str) -> None:
+def make_video(filename_include_extension: str, images_folder: str) -> None:
+    """ffmpeg를 통해 이미지의 집합을 영상으로 만듭니다."""
+
     assert shutil.which('ffmpeg') is not None, (
         "ffmpeg is not installed. Install ffmpeg and try again.")
 
-    if os.path.exists(filename_include_extension):
-        raise FileExistsError(f"Filename {filename_include_extension} is already taken.")
+    check_file_or_folder_existance(filename_include_extension)
+
+    # if os.path.exists(filename_include_extension):
+    #     raise FileExistsError(f"Filename {filename_include_extension} is already taken.")
 
     os.system(
-        f"ffmpeg -framerate 30 -pattern_type glob -i '{path_to_images}'  "
+        f"ffmpeg -framerate 30 -pattern_type glob -i '{images_folder}/*.png'  "
         f"-c:a copy -shortest -c:v libx264 -pix_fmt yuv420p {filename_include_extension}"
     )
 

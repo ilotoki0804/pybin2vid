@@ -116,7 +116,7 @@ def encode_to_video(
 ) -> None:
     encode_to_image(data, images_folder, max_bytes_per_matrix, use_base64, processes)
     video_path = video_path.format(images_folder=images_folder, data_length=len(data))
-    make_video(video_path, f"{images_folder}/*.png")
+    make_video(video_path, images_folder)
     if delete_images_folder_after_finished:
         shutil.rmtree(images_folder)
 
