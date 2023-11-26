@@ -6,16 +6,13 @@ import string
 from pylibdmtx import pylibdmtx as matrix
 import numpy as np
 
+from .miscs import (
+    ceil_div,
+    check_file_or_folder_existance,
+)
+
 MATRIX_PER_FRAME = 8
 DEFAULT_MAX_BYTES_PER_MATRIX = 660
-
-
-def ceil_div(dividend: int, divisor: int) -> int:
-    # div, mod = divmod(dividend, divisor)
-    # return div + bool(mod)
-
-    # 더 효율적인 알고리즘. https://stackoverflow.com/a/17511341/21997874
-    return -(dividend // -divisor)
 
 
 def split_bytes(bytes_data: bytes, max_bytes_per_matrix: int | None = DEFAULT_MAX_BYTES_PER_MATRIX) -> Iterator[bytes]:

@@ -15,7 +15,6 @@ from .encode import (
     bytes_to_simplified_matrix,
     matrices_to_real_image,
     MATRIX_PER_FRAME,
-    ceil_div,
 )
 from .decode import (
     read_frame,
@@ -23,6 +22,10 @@ from .decode import (
 from .video_manipulation import (
     read_video,
     make_video,
+)
+from .miscs import (
+    ceil_div,
+    check_file_or_folder_existance,
 )
 
 
@@ -48,20 +51,13 @@ def encode_to_image(
         _encode_to_image_in_parallel(data, images_folder, max_bytes_per_matrix, processes)
 
 
-def check_images_folder(images_folder: str) -> None:
-    if os.path.exists(images_folder):
-        if input(f"folder {images_folder!r} already exists. delete and continue? [y/N]: ") not in {'y', 'Y', 'ㅛ'}:
-            raise ValueError(f"User has rejected to continue. clean {images_folder!r} folder might help.")
-        shutil.rmtree(images_folder)
-    os.makedirs(images_folder)
-
-
 def _encode_to_image_in_serial(
     data: bytes,
     images_folder: str = "_tmp",
     max_bytes_per_matrix: int | None = None,
 ) -> None:
-    check_images_folder(images_folder)
+    check_file_or_folder_existance(images_folder)
+    os.makedirs(images_folder)
 
     zfill_length = len(str(sum(1 for _ in split_bytes(data, max_bytes_per_matrix))))
     image_matrices = (bytes_to_simplified_matrix(bytes_data) for bytes_data in split_bytes(data, max_bytes_per_matrix))
@@ -80,7 +76,8 @@ def _encode_to_image_in_parallel(
     max_bytes_per_matrix: int | None = None,
     processes: int = 8,
 ) -> None:
-    check_images_folder(images_folder)
+    check_file_or_folder_existance(images_folder)
+    os.makedirs(images_folder)
 
     splited = list(split_bytes(data, max_bytes_per_matrix))
     batched_bytes_list = [

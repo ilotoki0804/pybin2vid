@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from .main import (
     encode_to_image,
-    check_images_folder,
+    check_file_or_folder_existance,
     decode_from_image,
     encode_to_video,
     decode_from_video,

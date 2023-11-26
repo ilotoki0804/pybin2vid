@@ -21,7 +21,6 @@ from .video_manipulation import (
 )
 from .main import (
     encode_to_image,
-    check_images_folder,
     decode_from_image,
     encode_to_video,
     decode_from_video,
