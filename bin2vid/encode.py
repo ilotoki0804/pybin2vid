@@ -98,7 +98,7 @@ def concat_by_grid(arrays: Sequence[np.ndarray], shape: tuple[int, int]) -> np.n
 
 
 def mix(arrays: Iterable[np.ndarray], is_x_axis: bool, reshape: bool = True):
-    """XXX bugged. Do not use. Mixes two array.
+    """Mixes two array.
 
     array1:
         [[1, 2, 3],
@@ -135,7 +135,7 @@ def mix(arrays: Iterable[np.ndarray], is_x_axis: bool, reshape: bool = True):
 
     # Stack Overflow #33769094
     if is_x_axis:
-        mixed_array = np.array([list(zip(*x_cols)) for x_cols in zip(arrays)])
+        mixed_array = np.array([list(zip(*x_cols)) for x_cols in zip(*arrays)])
         return mixed_array.reshape(*mixed_array.shape[:-2], -1) if reshape else mixed_array
     else:
         mixed_array = np.array(list(zip(*arrays)))
@@ -143,15 +143,7 @@ def mix(arrays: Iterable[np.ndarray], is_x_axis: bool, reshape: bool = True):
 
 
 def mix_same(array: np.ndarray, count: int, is_x_axis: bool, reshape: bool = True):
-    # Stack Overflow #33769094
-    if is_x_axis:
-        mixed_array = np.array([list(zip(*(x_col for _ in range(count)))) for x_col in array])
-        return mixed_array.reshape(*mixed_array.shape[:-2], -1) if reshape else mixed_array
-    else:
-        mixed_array = np.array(list(zip(*(array for _ in range(count)))))
-        return mixed_array.reshape(-1, *mixed_array.shape[2:]) if reshape else mixed_array
-
-    # return mix([array] * count, is_x_axis, reshape)
+    return mix([array] * count, is_x_axis, reshape)
 
 
 def make_real_image(simplified_matirx: np.ndarray) -> np.ndarray:
