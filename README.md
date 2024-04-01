@@ -78,6 +78,13 @@ decode_from_video("output.mp4")
 
 바이너리 데이터를 영상으로 변환할 때 파일 크기는 약 10배로 늘어나고, 약 150배 가량의 여유 저장공간이 요구됩니다. 예를 들어 4MB짜리 바이너리를 영상으로 만든다면 40MB 가량의 영상이 나오고, 이 과정에서 약 600MB 가량의 저장 공간이 필요합니다. 필요한 저장공간이 영상 크기보다 큰 이유는 만드는 과정에서 프레임으로 사용할 이미지들을 각각 제작하기 때문입니다.
 
+## Simliar Projects
+
+https://github.com/bfaure/Data2Video
+https://github.com/RealUltra/Binary-Videos
+https://github.com/fangfufu/Converting-Arbitrary-Data-To-Video ( https://www.youtube.com/watch?v=VN1CKK5yPcE )
+https://www.youtube.com/watch?v=c_arQ-6ElYI
+
 ## Changelog
 
 v0.1.0: 시작

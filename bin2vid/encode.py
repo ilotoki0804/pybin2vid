@@ -1,6 +1,7 @@
 from __future__ import annotations
+import itertools
 
-from typing import Iterable, Iterator, Sequence
+from typing import Iterable, Iterator, Sequence, TypeVar
 import string
 
 from pylibdmtx import pylibdmtx as matrix
@@ -10,6 +11,8 @@ from .miscs import (
     ceil_div,
     check_file_or_folder_existance,
 )
+
+T = TypeVar('T')
 
 MATRIX_PER_FRAME = 8
 DEFAULT_MAX_BYTES_PER_MATRIX = 660
@@ -48,20 +51,34 @@ def bytes_to_simplified_matrix(bytes_data: bytes) -> np.ndarray:
     return pixels.reshape((620, 620))[::5, ::5][2:-2, 2:-2]
 
 
-def batch_and_fill_rest(simplified_matrices: Iterable[np.ndarray], fill_with: int = 256) -> Iterator[list[np.ndarray]]:
+def batch_and_fill_rest(
+    simplified_matrices: Iterable[T],
+    batch_size: int = MATRIX_PER_FRAME,
+    empty_alternative: T | None = None,
+) -> Iterator[list[T]]:
     simplified_matrices = iter(simplified_matrices)
 
+    is_empty_value_initialized = False
     continue_progress = True
     while continue_progress:
-        batched_matrices = []
-        for _ in range(MATRIX_PER_FRAME):
+        batched_matrices: list[T] = []
+        for _ in range(batch_size):
             try:
                 batched_matrices.append(next(simplified_matrices))
             except StopIteration:
                 if not batched_matrices:  # 크기가 정확하게 딱 맞았을 때
                     return
-                batched_matrices.append(np.full(batched_matrices[0].shape, fill_with))
+                assert empty_alternative is not None, "Maybe `simplified_matrices` was empty."
+                batched_matrices.append(empty_alternative)
                 continue_progress = False
+
+            if is_empty_value_initialized or empty_alternative is not None:
+                continue
+            sample_matix = batched_matrices[0]
+            assert isinstance(sample_matix, np.ndarray), (
+                "`simplified_matrices` should be `np.ndarray` type when `empty_value` is None.")
+            empty_alternative = np.full(sample_matix.shape, empty_alternative)
+            is_empty_value_initialized = True
 
         yield batched_matrices
 
@@ -69,6 +86,26 @@ def batch_and_fill_rest(simplified_matrices: Iterable[np.ndarray], fill_with: in
 def matrices_to_real_image(simplified_matrices: Iterable[np.ndarray]) -> Iterator[np.ndarray]:
     for batched_matrices in batch_and_fill_rest(simplified_matrices):
         yield make_real_image(concat_by_grid(batched_matrices, (4, 2)))
+
+
+def batch_rgb(simplified_matrices: Iterable[np.ndarray]) -> Iterator[list[np.ndarray]]:
+    simplified_matrices = iter(simplified_matrices)
+    empty_alternative = [np.full((120, 120), 225)] * MATRIX_PER_FRAME
+
+    for batched_matrices_rgb in batch_and_fill_rest(batch_and_fill_rest(simplified_matrices), 3, empty_alternative):
+        concatenated_matrices_rgb = [concat_by_grid(batched_matrices, (4, 2))
+                                     for batched_matrices in batched_matrices_rgb]
+        yield concatenated_matrices_rgb
+
+
+def matrices_to_real_rgb_image(simplified_matrices: Iterable[np.ndarray]) -> Iterator[np.ndarray]:
+    for concatenated_matrices_rgb in batch_rgb(simplified_matrices):
+        yield make_real_rgb_image(concatenated_matrices_rgb)
+
+
+def make_real_rgb_image(simplified_matirces: list[np.ndarray]) -> np.ndarray:
+    return mix((mix_same(mix_same(simplified_matrix, 4, True), 4, False)
+                for simplified_matrix in simplified_matirces), True, False)
 
 
 def concat_by_grid(arrays: Sequence[np.ndarray], shape: tuple[int, int]) -> np.ndarray:

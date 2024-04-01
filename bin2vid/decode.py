@@ -4,6 +4,10 @@ import logging
 from pylibdmtx import pylibdmtx as matrix
 import numpy as np
 
+from .encode import (
+    mix_same,
+)
+
 
 def read_frame(frame_image_matrix: np.ndarray, attempt: int = 2) -> list[bytes]:
     data = []
@@ -27,4 +31,11 @@ def read_frame(frame_image_matrix: np.ndarray, attempt: int = 2) -> list[bytes]:
                     return read_frame(frame_image_matrix, attempt=attempt - 1)
 
             data.append(decoded[0].data)
+    return data
+
+
+def read_rgb_frame(frame_image_matrix: np.ndarray, attempt: int = 2) -> list[bytes]:
+    data = []
+    for i in range(3):
+        data += read_frame(mix_same(frame_image_matrix[..., i], 3, True, False), attempt)
     return data

@@ -7,9 +7,12 @@ from .encode import (
     add_padding_by_certaion_size,
     matrices_to_real_image,
     mix,
+    batch_rgb,
+    batch_and_fill_rest,
 )
 from .decode import (
     read_frame,
+    read_rgb_frame,
 )
 from .testing import (
     test_image_coding,
